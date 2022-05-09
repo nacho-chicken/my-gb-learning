@@ -83,7 +83,8 @@ EnableLCD:
 	ei
 	ld	a, %10000011
 	ldh	[hLCD_CONTROL], a
-	; Enable VBlank Interrupts
+	; Enable VBlank interrupts
+	; If this bit isn't set, the CPU will hang permanently after HALTing
 	ld	a, %00000001
 	ldh	[hINTERRUPT_ENABLE], a
 	; Reset interrupt flags to prevent immediate interrupts
@@ -95,10 +96,14 @@ WaitForNextFrame:
 	ld	hl, VBlankFlag
 	xor	a
 	ld	[hl], a
-.loop:
-	ld	a, [hl]
-	or	a ; This is a faster and smaller way of doing CP 0
-	jr	z, .loop
+	; This stops the CPU until an enabled interrupt is fired
+	; Saves a potentially huge amount of battery life, as well as being
+	; far cleaner than looping a million times waiting for VBlank
+	halt
+	; Due to a CPU bug, NOP is required after a HALT
+	; RGBDS' compiler does this for you unless you specify the -h flag,
+	; which I have done
+	nop
 
 MoveSprite:
 	; Move the sprite left one pixel per frame
