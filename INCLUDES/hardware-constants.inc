@@ -2,6 +2,9 @@
 
 DEF DISPLAY_WIDTH	EQU 160
 DEF DISPLAY_HEIGHT	EQU 144
+; Display width and height in tiles
+DEF DISPLAY_W_TILES	EQU 20
+DEF DISPLAY_H_TILES	EQU 18
 
 ; Tile data constants
 DEF OBJ_RAM0		EQU $8000
@@ -21,6 +24,9 @@ DEF SCREEN_RAM1		EQU $9C00
 DEF TILE_DATA_SIZE	EQU $10
 ; The dimensions of one tile, in pixels (square, w=h)
 DEF TILE_SIZE		EQU 8
+; Size of a screen in RAM, in tiles
+DEF SCREEN_WIDTH	EQU 32
+DEF SCREEN_HEIGHT	EQU 32
 
 ; Sprite constants
 DEF OAM_RAM		EQU $FE00
