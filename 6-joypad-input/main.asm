@@ -11,6 +11,10 @@ horizontal wrapping, on top of the joypad code.
 It is also here that I finally remembered that I should probably
 disable the currently-unused audio hardware.
 
+...and at some point this section became less about handling joypad input
+and more about wrapping the sprite. The good news is that the wrapping
+function is pretty generic and will be useful later.
+
 */
 
 INCLUDE "../INCLUDES/hardware-constants.inc" ; Hardware-related definitions
@@ -40,7 +44,7 @@ Begin:
 	di
 	; Disable audio hardware
 	xor	a
-	ldh	[hSOUND_ON], a
+	ldh	[hSOUND_ON], a ; LDH is more efficient for I/O registers
 	SETCHARMAP commode ; The character map for this font
 	; Disable LCD to immediately start changing graphics
 	xor	a ; Just a faster way to set A to 0
@@ -75,9 +79,10 @@ SpriteInit:
 	call	load_tiles
 	; Set OAM
 	ld	hl, OAM_RAM
-	ld	a, 84
+	; Start the sprite in the middle of the screen
+	ld	a, ((DISPLAY_HEIGHT >> 1) + SPRITE_YOFFSET) - 4
 	ld	[hli], a ; Y Position
-	ld	a, 84
+	ld	a, (DISPLAY_WIDTH >> 1) + 4
 	ld	[hli], a ; X Position
 	ld	a, 1
 	ld	[hli], a ; Tile ID
@@ -113,7 +118,7 @@ WaitForNextFrame:
 
 MoveSprite:
 	ld	a, [wJoypadState]
-	ld	b, a
+	; Only need to check the D-Pad
 	and	(BUTTON_LEFT | BUTTON_RIGHT | BUTTON_UP | BUTTON_DOWN)
 	cp	0
 	jr	nz, .isMoving
@@ -121,22 +126,22 @@ MoveSprite:
 .isMoving:
 	ld	hl, OAM_RAM
 .up:
-	bit	bBUTTON_UP, b
+	bit	bBUTTON_UP, a
 	jr	z, .down
 	dec	[hl] ; Since Y Position is the first data in OAM, read directly
 	jr	.left ; Skip down so opposite directions are mutually exclusive
 .down:
-	bit	bBUTTON_DOWN, b
+	bit	bBUTTON_DOWN, a
 	jr	z, .left
 	inc	[hl]
 .left:
 	inc	l ; Change to X position data in OAM
-	bit	bBUTTON_LEFT, b
+	bit	bBUTTON_LEFT, a
 	jr	z, .right
 	dec	[hl]
 	jr	.checkWrap
 .right:
-	bit	bBUTTON_RIGHT, b
+	bit	bBUTTON_RIGHT, a
 	jr	z, .checkWrap
 	inc	[hl]
 .checkWrap:
