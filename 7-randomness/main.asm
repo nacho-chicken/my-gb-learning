@@ -469,7 +469,7 @@ FontMain_Data:
 FontMain_DataEnd:
 
 CharacterSprite_Data:
-	INCBIN "gfx/smile.2bpp"
+	INCBIN "../INCLUDES/gfx/smile.2bpp"
 CharacterSprite_DataEnd:
 
 

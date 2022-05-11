@@ -5,7 +5,7 @@
 
 ROM := sprites.gb
 OBJS := main.o
-GFX := smile.2bpp
+GFX := ../INCLUDES/gfx/smile.2bpp
 
 all: $(GFX) $(ROM)
 

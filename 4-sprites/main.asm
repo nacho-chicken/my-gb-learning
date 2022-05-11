@@ -68,7 +68,7 @@ SpriteInit:
 	ld	a, %11100100
 	ld	[OBJ_PAL0], a
 	; I'm keeping the first tile in VRAM empty
-	ld	hl, OBJ_RAM0 + TILE_SIZE
+	ld	hl, OBJ_RAM0 + TILE_DATA_SIZE
 	ld	bc, CharacterSprite_Data
 	ld	de, CharacterSprite_DataEnd - CharacterSprite_Data
 	call	load_tiles
@@ -180,7 +180,7 @@ GIMP is perfectly suitable for this, as well as being easily accessible.
 Then I use rgbgfx to generate the data.
 */
 CharacterSprite_Data:
-	INCBIN "smile.2bpp"
+	INCBIN "../INCLUDES/gfx/smile.2bpp"
 CharacterSprite_DataEnd:
 
 
