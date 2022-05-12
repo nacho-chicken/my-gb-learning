@@ -324,6 +324,10 @@ AnimateEggs:
 
 DMATransfer:
 	ld	a, HIGH(wOAMBuffer)
+	; The following line is the only thing changed from the Pan Docs
+	; Setting B to $28 caused the program to return before the transfer
+	; completed; setting to $29 waits four more cycles to make sure the
+	; GB is done transferring data to the OAM
 	ld	bc, $2946
 	jp	DMATransfer_HRAM
 
@@ -483,6 +487,9 @@ vblank_interrupt_handler:
 
 /*	lcd_stat_interrupt_handler
 For right now, only handles the LCD Y = LCD STAT interrupt
+
+	Registers changed:
+	a
 */
 lcd_stat_interrupt_handler:
 	; Enable VBlank interrupt, disable LCD Stat
