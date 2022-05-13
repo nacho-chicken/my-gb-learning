@@ -284,7 +284,7 @@ joypad_read:
 	swap	a
 	ld	b, a
 	; Second half of read (A, B, Select, Start)
-	ld	a, JOYPAD_ACTION
+	ld	a, JOYPAD_DIRECTION
 	ldh	[c], a
 	ldh	a, [hJOYPAD_STATUS]
 	ldh	a, [hJOYPAD_STATUS]
