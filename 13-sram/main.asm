@@ -131,6 +131,7 @@ SRAMInit:
 	; Enable SRAM
 	ld	a, $0A
 	ld	[$0000], a
+	; Since the game autoloads, need to check if a file already exists
 	ld	hl, sFileCreated
 	ld	a, [hli]
 	cp	$DE
@@ -146,6 +147,9 @@ SRAMInit:
 	jr	nz, .create
 	jr	.end
 .create:
+	; Creates a new save file
+	; This first section is the save file header,
+	; which is used to check for an existing save file
 	ld	hl, sFileCreated
 	ld	a, $DE
 	ld	[hli], a
@@ -155,6 +159,7 @@ SRAMInit:
 	ld	[hli], a
 	ld	a, $EF
 	ld	[hl], a
+	; Initialize the player's position to the center of the screen
 	ld	hl, sPlayerPos
 	ld	a, ((DISPLAY_HEIGHT >> 1) + SPRITE_YOFFSET) - 4
 	ld	[hli], a
@@ -277,10 +282,7 @@ EggInit_single:
 	inc	de
 	push	de
 	; Shift right 6 times to turn top 2 MSB into bottom 2 LSB
-	rrca
-	rrca
-	rrca
-	rrca
+	swap	a
 	rrca
 	rrca
 	and	%00000011
