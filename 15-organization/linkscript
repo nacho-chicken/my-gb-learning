@@ -1,0 +1,7 @@
+ROM0
+	ORG $150
+	"Main"
+	"Joypad"
+	"RNG"
+	"RAM loading"
+	"Wrapping"
