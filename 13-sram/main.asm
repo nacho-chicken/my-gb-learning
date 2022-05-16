@@ -44,8 +44,6 @@ Begin:
 	; This is to detect CGB after turning off LCD
 	ld	b, a
 	; Disable LCD to immediately start changing graphics
-	; This was changed to use the B register
-	; So as to easier detect CGB hardware
 	xor	a
 	ldh	[hLCD_CONTROL], a
 	ld	a, b
